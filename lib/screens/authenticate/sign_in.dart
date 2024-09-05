@@ -12,6 +12,10 @@ class _SignInState extends State<SignIn> {
 
   final AuthService _auth = AuthService();
 
+  // text field state
+  late String email;
+  late String password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,19 +27,40 @@ class _SignInState extends State<SignIn> {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-        child: ElevatedButton(
-          onPressed: () async {
-                dynamic result = await _auth.signInAnon();
-                
-                if (result == null){
-                  print("Error Signing In");
-                } else{
-                  print("signed In");
-                  print(result.uid);
-                }
-          },
-          child: Text('Sign In Anon'),
-        ),
+        child: Form(child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 20.0,
+            ),
+            TextFormField(
+              onChanged: (value){
+                  email = value;
+              },
+            ),
+            SizedBox(
+              height: 20.0,  
+            ),
+            TextFormField(
+              obscureText: true,
+              onChanged: (value){
+                  setState(() {
+                    password = value;
+                  });
+              },
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            ElevatedButton(onPressed: () async {
+                  print(email);
+                  print(password);
+            }, child: Text("Sign In"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.pink[400]
+            ),
+            )
+          ],
+        )),
       ),
     );
   }

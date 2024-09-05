@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:brew_crew/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -5,10 +7,16 @@ class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  CustomUser _userFromFirebase(User user){
+  CustomUser? _userFromFirebase(User user){
 
       return CustomUser(user.uid);
 
+  }
+
+
+  // listen to changed user stream
+  Stream<CustomUser?> get user {
+    return _auth.authStateChanges().map((User? user) => _userFromFirebase(user!));
   }
 
   // sign in anonymously
@@ -36,5 +44,13 @@ class AuthService {
 
 
   // log out
+  Future LogOut() async {
+      try {
+        return await _auth.signOut();
+      } catch(e){
+        print(e.toString());
+        return null;
+      }
+  }
 
 }
